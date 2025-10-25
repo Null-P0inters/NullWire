@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 
+import type { Models } from 'node-appwrite';
+
+import { ID, Query, serverConfig, serverDatabases } from '@/lib/appwriteServer';
+
 export type DeviceStatusRecord = {
   deviceId: string;
   deviceName: string;
@@ -70,7 +74,7 @@ const ensurePartitionHealth = (value: unknown): number[] => {
   });
 };
 
-let latestStatus: DeviceStatusRecord | null = null;
+type DeviceStatusDocument = DeviceStatusRecord & Models.Document;
 
 export async function POST(request: Request) {
   let payload: DeviceStatusPayload;
@@ -95,15 +99,70 @@ export async function POST(request: Request) {
       receivedAt: new Date().toISOString(),
     };
 
-    latestStatus = record;
+    const document = await serverDatabases.createDocument<DeviceStatusDocument>(
+      serverConfig.databaseId,
+      serverConfig.deviceCollectionId,
+      ID.unique(),
+      record
+    );
 
-    return NextResponse.json({ message: 'Device status recorded', data: record }, { status: 201 });
+    return NextResponse.json({ message: 'Device status recorded', data: record, documentId: document.$id }, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to process payload';
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
 
-export async function GET() {
-  return NextResponse.json({ data: latestStatus }, { status: 200 });
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const appwriteId = url.searchParams.get('appwriteId');
+
+  if (!appwriteId) {
+    return NextResponse.json({ error: 'Missing appwriteId query parameter' }, { status: 400 });
+  }
+
+  try {
+    const documents = await serverDatabases.listDocuments<DeviceStatusDocument>(
+      serverConfig.databaseId,
+      serverConfig.deviceCollectionId,
+      [Query.equal('appwriteId', appwriteId), Query.orderDesc('$createdAt'), Query.limit(1)]
+    );
+
+    const latest = documents.documents[0] ?? null;
+
+    if (!latest) {
+      return NextResponse.json({ data: null }, { status: 200 });
+    }
+
+    const partitionHealth = Array.isArray(latest.partitionHealth)
+      ? latest.partitionHealth.map((value: unknown) => {
+          if (value === 0 || value === 1) {
+            return value;
+          }
+          if (typeof value === 'number') {
+            return value > 0 ? 1 : 0;
+          }
+          const numeric = Number(value);
+          return Number.isNaN(numeric) ? 0 : numeric > 0 ? 1 : 0;
+        })
+      : [];
+
+    const record: DeviceStatusRecord = {
+      deviceId: latest.deviceId,
+      deviceName: latest.deviceName,
+      firmwareVersion: latest.firmwareVersion,
+      manufacturerId: latest.manufacturerId,
+      walletId: latest.walletId,
+      appwriteId: latest.appwriteId,
+      hash: latest.hash,
+      statusInfo: latest.statusInfo,
+      partitionHealth,
+      receivedAt: latest.receivedAt,
+    };
+
+    return NextResponse.json({ data: record }, { status: 200 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unable to load device status';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
