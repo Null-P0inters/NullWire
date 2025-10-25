@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import type { Models } from 'node-appwrite';
+import { AppwriteException } from 'node-appwrite';
 
 import { ID, Query, serverConfig, serverDatabases } from '@/lib/appwriteServer';
 
@@ -98,15 +99,50 @@ export async function POST(request: Request) {
       partitionHealth: ensurePartitionHealth(payload.partition_health),
       receivedAt: new Date().toISOString(),
     };
+    let statusCode = 201;
+    let storedDocument: DeviceStatusDocument;
 
-    const document = await serverDatabases.createDocument<DeviceStatusDocument>(
-      serverConfig.databaseId,
-      serverConfig.deviceCollectionId,
-      ID.unique(),
-      record
+    try {
+      storedDocument = await serverDatabases.createDocument<DeviceStatusDocument>(
+        serverConfig.databaseId,
+        serverConfig.deviceCollectionId,
+        ID.unique(),
+        record
+      );
+    } catch (error) {
+      if (error instanceof AppwriteException && error.code === 409) {
+        const existing = await serverDatabases.listDocuments<DeviceStatusDocument>(
+          serverConfig.databaseId,
+          serverConfig.deviceCollectionId,
+          [Query.equal('appwriteId', record.appwriteId), Query.limit(1)]
+        );
+
+        const current = existing.documents[0];
+
+        if (!current) {
+          throw error;
+        }
+
+        storedDocument = await serverDatabases.updateDocument<DeviceStatusDocument>(
+          serverConfig.databaseId,
+          serverConfig.deviceCollectionId,
+          current.$id,
+          record
+        );
+        statusCode = 200;
+      } else {
+        throw error;
+      }
+    }
+
+    return NextResponse.json(
+      {
+        message: statusCode === 201 ? 'Device status recorded' : 'Device status updated',
+        data: record,
+        documentId: storedDocument.$id,
+      },
+      { status: statusCode }
     );
-
-    return NextResponse.json({ message: 'Device status recorded', data: record, documentId: document.$id }, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to process payload';
     return NextResponse.json({ error: message }, { status: 400 });
