@@ -1,10 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ID } from 'appwrite';
 
 import type { DeviceStatusRecord } from '@/app/api/device-status/route';
-import { databases, config } from '@/lib/appwrite';
+import { account } from '@/lib/appwrite';
 
 const partitionSegments = [
   { label: 'Root FS', description: 'Primary root filesystem partition' },
@@ -28,11 +27,49 @@ export default function DashboardPage() {
   const [status, setStatus] = useState<DeviceStatusRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [appwriteId, setAppwriteId] = useState<string | null>(null);
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadUser = async () => {
+      setIsCheckingUser(true);
+      try {
+        const user = await account.get();
+        if (!isMounted) {
+          return;
+        }
+        setAppwriteId(user.$id);
+      } catch {
+        if (!isMounted) {
+          return;
+        }
+        setAppwriteId(null);
+      } finally {
+        if (isMounted) {
+          setIsCheckingUser(false);
+        }
+      }
+    };
+
+    void loadUser();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const fetchStatus = useCallback(async () => {
+    if (!appwriteId) {
+      return;
+    }
+
     try {
       setError(null);
-      const response = await fetch('/api/device-status', { cache: 'no-store' });
+      const response = await fetch(`/api/device-status?appwriteId=${encodeURIComponent(appwriteId)}`, {
+        cache: 'no-store',
+      });
       if (!response.ok) {
         throw new Error(`Unexpected response ${response.status}`);
       }
@@ -42,18 +79,6 @@ export default function DashboardPage() {
       
       if (deviceData) {
         setStatus(deviceData);
-        
-        // Save to Appwrite database
-        try {
-          await databases.createDocument(
-            config.databaseId,
-            config.deviceCollectionId,
-            ID.unique(),
-            deviceData
-          );
-        } catch (dbError) {
-          console.error('Error saving to Appwrite:', dbError);
-        }
       } else {
         setStatus(null);
       }
@@ -63,9 +88,13 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [appwriteId]);
 
   useEffect(() => {
+    if (!appwriteId) {
+      return;
+    }
+
     void fetchStatus();
 
     const interval = setInterval(() => {
@@ -73,7 +102,15 @@ export default function DashboardPage() {
     }, 15000);
 
     return () => clearInterval(interval);
-  }, [fetchStatus]);
+  }, [appwriteId, fetchStatus]);
+
+  useEffect(() => {
+    if (!isCheckingUser && !appwriteId) {
+      setIsLoading(false);
+      setStatus(null);
+      setError('No Appwrite session found. Authenticate to view device status.');
+    }
+  }, [appwriteId, isCheckingUser]);
 
   const partitionHealth = useMemo(() => {
     if (!status) {
