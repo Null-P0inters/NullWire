@@ -10,9 +10,8 @@ import { Header } from '@/components/Header';
 import { account } from '@/lib/appwrite';
 
 const consoleItems = [
-  { label: 'Device Status', href: '/dashboard' },
+  { label: 'Device Failure Status', href: '/dashboard' },
   { label: 'Publish Form', href: '/dashboard/publish' },
-  { label: 'Blockchain Status', href: '/dashboard/blockchain' },
 ];
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
