@@ -31,7 +31,7 @@ export function Footer() {
   className="border-t border-[color:var(--border-soft)] bg-[rgba(24,24,37,0.8)] px-6 py-10 text-xs uppercase tracking-[0.3em] text-[color:var(--text-muted)]"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <span className="footer-fade">© Lorem Ipsum cuz no one gonna see this</span>
+        <span className="footer-fade">Lorem Ipsum cuz no one gonna see this</span>
         <span className="footer-fade">that line is not a mistake</span>
       </div>
     </footer>
