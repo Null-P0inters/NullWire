@@ -352,7 +352,7 @@ function AuthPageContent() {
           <p className="mt-4">
             Need help?{' '}
             <Link
-              href="mailto:email@email.com"
+              href="mailto:debjeetbanerjee48@gmail.com"
               className="text-[color:var(--ctp-amber)] underline underline-offset-4 transition hover:text-[color:var(--ctp-amber-strong)]"
             >
               Contact the Nullwire trust desk
@@ -572,7 +572,7 @@ function AuthPageContent() {
                   onChange={(event) => setEmail(event.target.value)}
                   disabled={isAuthenticated}
                   className="w-full border border-transparent bg-[color:var(--panel-subtle)] px-3 py-2 text-sm text-[color:var(--text-primary)] outline-none transition focus:border-[color:var(--border-strong)] focus:bg-[color:var(--panel-alt)]"
-                  placeholder="email@email.com"
+                  placeholder="debjeetbanerjee48@gmail.com"
                   required
                 />
               </div>

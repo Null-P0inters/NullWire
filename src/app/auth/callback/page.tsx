@@ -119,7 +119,7 @@ function CallbackLayout({
                 Return to Auth Console
               </Link>
               <p className="text-xs text-[color:var(--text-muted)]">
-                Need help? <span className="text-[color:var(--border-strong)]">email@email.com</span>
+                Need help? <span className="text-[color:var(--border-strong)]">debjeetbanerjee48@gmail.com</span>
               </p>
             </div>
           ) : null}

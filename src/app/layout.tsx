@@ -19,12 +19,12 @@ export const metadata: Metadata = {
   title: "Nullwire Notary | Decentralized Firmware Integrity",
   description:
     "Launch a decentralized firmware integrity notary that notarizes updates on-chain so every IoT device can self-verify firmware authenticity before install.",
-  metadataBase: new URL("https://localhost:3000"),
+  metadataBase: new URL("https://nullwire.vercel.app"),
   openGraph: {
     title: "Nullwire Notary",
     description:
       "Blockchain-backed firmware hash registry delivering verifiable updates for IoT devices.",
-    url: "https://localhost:3000",
+    url: "https://nullwire.vercel.app",
     type: "website",
     locale: "en_US",
   },
