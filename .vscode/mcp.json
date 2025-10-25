@@ -1,0 +1,20 @@
+        {
+          "servers": {
+            "composer-kit-mcp": {
+              "command": "uvx",
+              "args": ["composer-kit-mcp"]
+            },
+            "appwrite-api": {
+              "command": "uvx",
+              "args": [
+                "mcp-server-appwrite",
+                "--sites"
+              ],
+              "env": {
+                "APPWRITE_PROJECT_ID": "68f9e1a9002cd4c9de96",
+                "APPWRITE_API_KEY": "standard_c340ec2c86e7dda3b063ee638e725da57e938b0bc8c29e3f374d9d66791a4a6ea121ebec6aca8b157fee8f05c08833232a803aece3b82adbb6855a6681a55599deed15d137262d4e6cc26ce22e143ea5efe1ccb4cfd28ac74a4520616855700f97c79c6594ac164c744bf1a138743113f6980f7b1e48c1419f325740db04c808",
+                "APPWRITE_ENDPOINT": "https://fra.cloud.appwrite.io/v1"
+              }
+            }
+          }
+        }
