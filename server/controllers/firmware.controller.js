@@ -42,7 +42,7 @@ export const verifyFirmware = async (req, res) => {
     }
 
     const result = await firmwareService.verifyFirmwareHash(device_id, firmware_hash);
-    res.json({ success: true, ...result });
+    res.json({...result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
