@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { type ChangeEvent, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, type ChangeEvent, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Models } from 'appwrite';
 import { ID, OAuthProvider } from 'appwrite';
@@ -24,6 +24,14 @@ type EmailChallenge = {
 };
 
 export default function AuthPage() {
+  return (
+    <Suspense fallback={<AuthPageSuspense />}>
+      <AuthPageContent />
+    </Suspense>
+  );
+}
+
+function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -618,6 +626,27 @@ export default function AuthPage() {
             </div>
           </div>
         </div>
+      </main>
+      <Footer />
+    </GridBackground>
+  );
+}
+
+function AuthPageSuspense() {
+  return (
+    <GridBackground>
+      <Header />
+      <main className="relative z-10 mx-auto flex w-full max-w-6xl grow flex-col px-6 pb-16 pt-32">
+        <section className="mb-12 flex flex-col gap-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[color:var(--text-muted)]">Access Control</p>
+          <h1 className="text-4xl font-semibold text-[color:var(--text-primary)] md:text-5xl">Verify Your Nullwire Session</h1>
+          <p className="max-w-2xl text-sm text-[color:var(--text-secondary)]">
+            Loading authentication options…
+          </p>
+        </section>
+        <section className="border border-[color:var(--border-soft)] bg-[color:var(--panel)]/85 p-6 text-sm text-[color:var(--text-secondary)] shadow-[color:var(--shadow-primary)]/30 shadow-lg backdrop-blur">
+          Preparing session details…
+        </section>
       </main>
       <Footer />
     </GridBackground>
