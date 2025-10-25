@@ -22,7 +22,7 @@ export function Hero() {
   return (
     <section className="relative isolate flex min-h-[70vh] flex-col justify-center gap-12 py-20">
   <div className="pointer-events-none absolute left-0 top-1/2 hidden -translate-x-[150%] -translate-y-1/2 flex-col items-center gap-4 text-[color:var(--text-muted)] sm:flex">
-  <span className="pointer-events-auto -rotate-270 -translate-y-15 text-[10px] uppercase tracking-[0.4em] text-[color:var(--text-secondary)]">Created by:</span>
+  
         <div className="pointer-events-auto flex flex-col items-center gap-3">
           {creators.map((creator) => (
             <a
@@ -40,6 +40,9 @@ export function Hero() {
             </a>
           ))}
         </div>
+            <span className="pointer-events-auto -rotate-90 translate-y-12 text-[10px] uppercase tracking-[0.4em] text-[color:var(--text-secondary)]">
+              Created by:
+            </span>
       </div>
 
       <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[color:var(--text-muted)] sm:hidden">
