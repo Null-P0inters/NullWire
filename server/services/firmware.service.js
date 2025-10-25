@@ -21,10 +21,6 @@ export const verifyFirmwareHash = async (device_id, firmware_hash) => {
 
   const latest = deviceMessages[0];
   return {
-    verified: latest.firmware_hash === firmware_hash,
-    latest_firmware_version: latest.firmware_version,
-    latest_firmware_hash: latest.firmware_hash,
-    timestamp: latest.timestamp,
-    date: latest.date,
+    status: (latest.firmware_hash === firmware_hash)? "success" : "failure"
   };
 };
