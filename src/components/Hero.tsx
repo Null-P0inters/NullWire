@@ -1,22 +1,6 @@
 "use client";
 
-const creators = [
-  {
-    href: "https://github.com/ImonChakraborty",
-    image: "https://avatars.githubusercontent.com/u/135951651?s=96&v=4",
-    alt: "GitHub avatar for contributor ImonChakraborty",
-  },
-  {
-    href: "https://github.com/mintRaven-05",
-    image: "https://avatars.githubusercontent.com/u/136410764?s=96&v=4",
-    alt: "GitHub avatar for contributor mintRaven-05",
-  },
-  {
-    href: "https://github.com/Nilanjan-Mondal",
-    image: "https://avatars.githubusercontent.com/u/141814986?s=96&v=4",
-    alt: "GitHub avatar for contributor Nilanjan-Mondal",
-  },
-];
+import { creators } from "@/lib/creators";
 
 export function Hero() {
   return (
