@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import type { Models } from 'appwrite';
 import { ID, OAuthProvider } from 'appwrite';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useChainId, useSwitchChain } from 'wagmi';
+import { useAccount, useChainId, useDisconnect, useSwitchChain } from 'wagmi';
 
 import { account } from '@/lib/appwrite';
 import { GridBackground } from '@/components/GridBackground';
@@ -38,8 +38,10 @@ export default function AuthPage() {
   const [currentUser, setCurrentUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const isAuthenticated = Boolean(currentUser);
+  const redirectPath = searchParams.get('redirect');
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
+  const { disconnectAsync } = useDisconnect();
   const {
     chains: switchableChains,
     switchChainAsync,
@@ -106,6 +108,16 @@ export default function AuthPage() {
       setMessageTone('error');
     }
   }, [loadUser, notifyAuthChange, router, searchParams]);
+
+  useEffect(() => {
+    if (!isAuthenticated || isLoadingUser) {
+      return;
+    }
+
+    if (redirectPath && redirectPath.startsWith('/')) {
+      router.replace(redirectPath);
+    }
+  }, [isAuthenticated, isLoadingUser, redirectPath, router]);
 
   const handleRequestOtp = useCallback(
     async (evt: React.FormEvent<HTMLFormElement>) => {
@@ -247,6 +259,13 @@ export default function AuthPage() {
 
     try {
       await account.deleteSession('current');
+      if (disconnectAsync) {
+        try {
+          await disconnectAsync();
+        } catch (walletError) {
+          console.error('Failed to disconnect wallet', walletError);
+        }
+      }
       setMessage('Signed out.');
       setMessageTone('info');
       setCurrentUser(null);
@@ -256,7 +275,7 @@ export default function AuthPage() {
       setMessage(errorMessage);
       setMessageTone('error');
     }
-  }, [notifyAuthChange, resetFeedback]);
+  }, [disconnectAsync, notifyAuthChange, resetFeedback]);
 
   const otpHint = useMemo(() => {
     if (!challenge?.expireAt) {
