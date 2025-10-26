@@ -7,6 +7,31 @@
 <h1 align=center>NullWire</h1>
 <h2 align=center>NullPointers<br>Build on CELO Hackathon</h2>
 
+<br/>
+
+## Project Overview
+
+Decentralized Firmware Integrity Notary is a blockchain-based solution designed to secure IoT device firmware updates against malicious supply chain attacks. The system leverages smart contracts deployed on the CELO Sepolia Testnet to store cryptographic hashes of official firmware releases, ensuring that each update is verifiable and tamper-proof. During the update process, IoT devices compute the hash of the received firmware and cross-verify it with the hash published on the blockchain before execution. Unauthorized or altered firmware is automatically rejected, and the device transitions to a panic fallback partition to maintain operational safety. The architecture integrates Metamask and WalletConnect for blockchain interaction, Hardhat and Alchemy for smart contract deployment, and a Custom CRC Controller at the firmware level to handle verification and integrity checks. This approach decentralizes trust, provides transparent firmware traceability, and strengthens the overall security of IoT ecosystems.
+<br/>
+
+
+
+<img width="1847" height="1034" alt="image" src="https://github.com/user-attachments/assets/20e3f375-51ad-44c5-bfc4-48213747fc1d" />
+
+
+
+
+<img width="1834" height="995" alt="image" src="https://github.com/user-attachments/assets/1164c64b-808f-491e-88d0-0ee26d1a9087" />
+
+
+
+<img width="1832" height="987" alt="image" src="https://github.com/user-attachments/assets/cbf8a9ca-97be-4dc5-97e9-de3f79ec6de3" />
+
+
+
+
+
+
 <h2 align=center> Contributors </h2>
 <div align=center>
 <table>
@@ -47,6 +72,5 @@
 <a href="https://github.com/nilanjan-mondal"><img src="https://github.com/user-attachments/assets/c0336e8b-334c-46e0-9743-1b4df092ea23" height=70 width=70></a>
 
 
-</div>
 <br><br><br>
 
