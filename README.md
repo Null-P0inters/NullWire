@@ -16,6 +16,10 @@ Decentralized Firmware Integrity Notary is a blockchain-based solution designed 
 <br/>
 DEMO: https://www.youtube.com/watch?v=HPv2CJOVuUE
 <br/>
+CONTACT ADDRESS: 0x87A946FB3F0d3d04C78Ec07e84A048f6F5e45a45
+<br/>
+BLOCK EXPLORER: https://celo-sepolia.blockscout.com/address/0x87A946FB3F0d3d04C78Ec07e84A048f6F5e45a45?tab=txs
+<br/>
 
 
 <img width="1847" height="1034" alt="image" src="https://github.com/user-attachments/assets/20e3f375-51ad-44c5-bfc4-48213747fc1d" />
