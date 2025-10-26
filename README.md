@@ -13,7 +13,9 @@
 
 Decentralized Firmware Integrity Notary is a blockchain-based solution designed to secure IoT device firmware updates against malicious supply chain attacks. The system leverages smart contracts deployed on the CELO Sepolia Testnet to store cryptographic hashes of official firmware releases, ensuring that each update is verifiable and tamper-proof. During the update process, IoT devices compute the hash of the received firmware and cross-verify it with the hash published on the blockchain before execution. Unauthorized or altered firmware is automatically rejected, and the device transitions to a panic fallback partition to maintain operational safety. The architecture integrates Metamask and WalletConnect for blockchain interaction, Hardhat and Alchemy for smart contract deployment, and a Custom CRC Controller at the firmware level to handle verification and integrity checks. This approach decentralizes trust, provides transparent firmware traceability, and strengthens the overall security of IoT ecosystems.
 <br/>
-
+<br/>
+DEMO: https://www.youtube.com/watch?v=HPv2CJOVuUE
+<br/>
 
 
 <img width="1847" height="1034" alt="image" src="https://github.com/user-attachments/assets/20e3f375-51ad-44c5-bfc4-48213747fc1d" />
