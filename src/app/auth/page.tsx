@@ -572,7 +572,7 @@ function AuthPageContent() {
                   onChange={(event) => setEmail(event.target.value)}
                   disabled={isAuthenticated}
                   className="w-full border border-transparent bg-[color:var(--panel-subtle)] px-3 py-2 text-sm text-[color:var(--text-primary)] outline-none transition focus:border-[color:var(--border-strong)] focus:bg-[color:var(--panel-alt)]"
-                  placeholder="debjeetbanerjee48@gmail.com"
+                  placeholder="email@email.com"
                   required
                 />
               </div>
